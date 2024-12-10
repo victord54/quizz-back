@@ -2,8 +2,8 @@ import express from 'express';
 import http from 'http';
 import cors from 'cors';
 
-// import AuthRoute from './routes/auth.js';
-// import logfile from './utils/logfile.js';
+import AuthRoute from './routes/auth.js';
+import logfile from './utils/logfile.js';
 import Response from './utils/response.js';
 // import database from './utils/database/database.js';
 
@@ -33,7 +33,7 @@ export default class Server {
         /**
          * Middleware for logging the request
          */
-        // this.app.use(logfile.logRequest);
+        this.app.use(logfile.logRequest);
 
         // ========================== ROUTES ==================================
         /**
@@ -53,7 +53,7 @@ export default class Server {
         /**
          * Part of the route for the authentication
          */
-        // this.app.use('/auth', AuthRoute);
+        this.app.use('/auth', AuthRoute);
 
         /**
          * Route for handling 404 errors
@@ -68,18 +68,18 @@ export default class Server {
         /**
          * Middleware for logging the error
          */
-        // this.app.use(logfile.logError);
+        this.app.use(logfile.logError);
 
         /**
          * Middleware for handling errors
          */
-        // this.app.use((err, req, res, next) => {
-        //     // console.error(err);
-        //     return res.status(err.statusCode || 500).json({
-        //         error: err.name || 'Error',
-        //         message: err.message || 'Internal server error',
-        //     });
-        // });
+        this.app.use((err, req, res, next) => {
+            console.error(err);
+            return res.status(err.statusCode || 500).json({
+                error: err.name || 'Error',
+                message: err.message || 'Internal server error',
+            });
+        });
     }
 
     /**
