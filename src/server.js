@@ -3,9 +3,10 @@ import http from 'http';
 import cors from 'cors';
 
 import AuthRoute from './routes/auth.js';
+import QuizzRoute from './routes/quizz.js';
 import logfile from './utils/logfile.js';
 import Response from './utils/response.js';
-// import database from './utils/database/database.js';
+import database from './utils/database/database.js';
 
 /**
  * Server class
@@ -56,6 +57,11 @@ export default class Server {
         this.app.use('/auth', AuthRoute);
 
         /**
+         * Part of the route for the quizz
+         */
+        this.app.use('/quizz', QuizzRoute);
+
+        /**
          * Route for handling 404 errors
          */
         this.app.use('*', (req, res) => {
@@ -87,10 +93,10 @@ export default class Server {
      */
     async start() {
         try {
-            // await database.testConnection();
-            // console.log('database connection success');
-            // await database.settingsSQL();
-            // console.log('database settings success');
+            await database.testConnection();
+            console.log('database connection success');
+            await database.settingsSQL();
+            console.log('database settings success');
             this.server.listen(this.port || 3000, () => {
                 console.log(`listening on port: ${this.port || 3000}`);
             });
